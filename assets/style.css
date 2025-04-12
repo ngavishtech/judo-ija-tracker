@@ -1,0 +1,146 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 100%;
+    width: 95%;
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.right-button {
+    margin-left: auto;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#clearBtn {
+    background-color: #e74c3c;
+}
+
+#clearBtn:hover {
+    background-color: #c0392b;
+}
+
+#refreshBtn {
+    background-color: lightsalmon;
+    color: white;
+}
+
+#refreshBtn:hover {
+    background-color: #e07b62; /* slightly darker on hover */
+}
+
+.countdown-text {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+pre {
+    background: #f0f0f0;
+    padding: 16px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.match-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 15px 0;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.highlight {
+    border: 2px solid #f7d600;
+    background-color: #fff59d;
+}
+
+.match-title {
+    background-color: #f0f0f0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.match-category {
+    background-color: #eee;
+    padding: 10px;
+    font-style: italic;
+}
+
+.match-white,
+.match-blue {
+    padding: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.match-white {
+    background-color: #ffffff;
+}
+
+.match-blue {
+    background-color: #d0e6ff;
+}

@@ -134,3 +134,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+/.idea/.gitignore
+/.idea/judo-ija-tracker.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml

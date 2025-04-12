@@ -6,7 +6,7 @@ let trackingActive = false;
 let url = ''
 
 document.getElementById('trackToggleBtn').addEventListener('click', () => {
-    rawUrl = document.getElementById('urlInput').value;
+    let rawUrl = document.getElementById('urlInput').value;
     url = normalizeUrl(rawUrl);
 
     if (!trackingActive) {
@@ -49,7 +49,7 @@ document.getElementById('trackToggleBtn').addEventListener('click', () => {
 });
 
 document.getElementById('refreshBtn').addEventListener('click', () => {
-    rawUrl = document.getElementById('urlInput').value;
+    let rawUrl = document.getElementById('urlInput').value;
     url = normalizeUrl(rawUrl);
     if (!url) {
         return;

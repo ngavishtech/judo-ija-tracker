@@ -16,35 +16,9 @@ document.getElementById('trackToggleBtn').addEventListener('click', () => {
 
         finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`${url}/nextmatches.json`)}`;
         fetchAndDisplay();
-
-        // Start tracking: Start both fetch and countdown intervals
-        intervalId = setInterval(() => {
-            fetchAndDisplay();
-            countdown = 30;
-        }, 30000);
-
-        countdown = 30;
-        document.getElementById('countdown').textContent = countdown;
-        countdownIntervalId = setInterval(() => {
-            countdown--;
-            document.getElementById('countdown').textContent = countdown;
-            if (countdown <= 0) countdown = 30;
-        }, 1000);
-
-        // Update UI to "Stop Tracking"
-        document.getElementById('trackToggleBtn').textContent = 'Stop Tracking';
-        trackingActive = true;
+        startTracking();
     } else {
-        // Stop tracking: Clear both intervals
-        clearInterval(intervalId);
-        clearInterval(countdownIntervalId);
-        intervalId = null;
-        countdownIntervalId = null;
-
-        // Update UI to "Start Tracking"
-        document.getElementById('trackToggleBtn').textContent = 'Start Tracking';
-        document.getElementById('countdown').textContent = '-';
-        trackingActive = false;
+        stopTracking(true);
     }
 });
 
@@ -59,29 +33,8 @@ document.getElementById('refreshBtn').addEventListener('click', () => {
     fetchAndDisplay();
 
     if (trackingActive) {
-        countdown = 30;
-        document.getElementById('countdown').textContent = countdown;
-
-        // Clear existing countdown interval
-        clearInterval(intervalId);
-        clearInterval(countdownIntervalId);
-        intervalId = null;
-        countdownIntervalId = null;
-
-        // Restart countdown interval
-        // Start tracking: Start both fetch and countdown intervals
-        intervalId = setInterval(() => {
-            fetchAndDisplay();
-            countdown = 30;
-        }, 30000);
-
-        countdown = 30;
-        document.getElementById('countdown').textContent = countdown;
-        countdownIntervalId = setInterval(() => {
-            countdown--;
-            document.getElementById('countdown').textContent = countdown;
-            if (countdown <= 0) countdown = 30;
-        }, 1000);
+        stopTracking(false);
+        startTracking();
     }
 });
 
@@ -1013,3 +966,37 @@ function fetchAndDisplay() {
         });
 }
 
+function startTracking() {
+    // Start tracking: Start both fetch and countdown intervals
+    intervalId = setInterval(() => {
+        fetchAndDisplay();
+        countdown = 30;
+    }, 30000);
+
+    countdown = 30;
+    document.getElementById('countdown').textContent = countdown;
+    countdownIntervalId = setInterval(() => {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        if (countdown <= 0) countdown = 30;
+    }, 1000);
+
+    // Update UI to "Stop Tracking"
+    document.getElementById('trackToggleBtn').textContent = 'Stop Tracking';
+    trackingActive = true;
+}
+
+function stopTracking(isClearUi) {
+    // Stop tracking: Clear both intervals
+    clearInterval(intervalId);
+    clearInterval(countdownIntervalId);
+    intervalId = null;
+    countdownIntervalId = null;
+
+    if (isClearUi) {
+        // Update UI to "Start Tracking"
+        document.getElementById('trackToggleBtn').textContent = 'Start Tracking';
+        document.getElementById('countdown').textContent = '-';
+        trackingActive = false;
+    }
+}

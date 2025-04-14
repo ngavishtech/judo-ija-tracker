@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Zip Folder
-        run: zip -r judoijatracker.zip judoijatracker -x ".gitignore"
+        run: zip -r judoijatracker.zip index.html assets LICENSE
       - name: Release
         uses: ncipollo/release-action@v1
         with:

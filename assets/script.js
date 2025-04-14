@@ -72,7 +72,6 @@ function normalizeUrl(rawUrl) {
     }
 }
 
-// Fetch and display function
 function fetchAndDisplay() {
     if (!finalUrl) return;
 

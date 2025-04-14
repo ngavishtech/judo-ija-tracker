@@ -3,17 +3,22 @@ let countdownIntervalId = null;
 let finalUrl = '';
 let countdown = 30;
 let trackingActive = false;
-let url = ''
+let url = '';
+let lastFetchedData = null;
+
+// Track selected view mode
+document.getElementById('viewMode').addEventListener('change', () => {
+    if (lastFetchedData) {
+        renderMatches(lastFetchedData);
+    }
+});
 
 document.getElementById('trackToggleBtn').addEventListener('click', () => {
     let rawUrl = document.getElementById('urlInput').value;
     url = normalizeUrl(rawUrl);
 
     if (!trackingActive) {
-        if (!url) {
-            return;
-        }
-
+        if (!url) return;
         finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`${url}/nextmatches.json`)}`;
         fetchAndDisplay();
         startTracking();
@@ -25,9 +30,7 @@ document.getElementById('trackToggleBtn').addEventListener('click', () => {
 document.getElementById('refreshBtn').addEventListener('click', () => {
     let rawUrl = document.getElementById('urlInput').value;
     url = normalizeUrl(rawUrl);
-    if (!url) {
-        return;
-    }
+    if (!url) return;
 
     finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`${url}/nextmatches.json`)}`;
     fetchAndDisplay();
@@ -50,6 +53,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
     document.getElementById('trackToggleBtn').textContent = 'Start Tracking';
     document.getElementById('countdown').textContent = '-';
     document.getElementById('output').innerHTML = '';
+    lastFetchedData = null;
 });
 
 function normalizeUrl(rawUrl) {
@@ -888,106 +892,40 @@ function fetchAndDisplay() {
                     ]
                 }
             ];
-            const outputContainer = document.getElementById('output');
-            outputContainer.innerHTML = ''; // Clear old content
-
-            const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
-            const searchTerms = searchInput
-                .split(',')
-                .map(term => term.trim().toLowerCase())
-                .filter(term => term.length > 0);
-
-            data.forEach(tatami => {
-                const filteredMatches = tatami.matches
-                    .filter(match => match.num !== 0)
-                    .filter(match => {
-                        const fields = [
-                            `${match.first1} ${match.last1}`,
-                            `${match.last1} ${match.first1}`,
-                            `${match.first2 ?? ''} ${match.last2 ?? ''}`,
-                            `${match.last2 ?? ''} ${match.first2 ?? ''}`,
-                            match.club1,
-                            match.club2
-                        ].join(' ').toLowerCase();
-                        return searchTerms.length === 0 || searchTerms.some(term => fields.includes(term));
-                    });
-
-                if (filteredMatches.length === 0) return;
-
-                // Create tatami block
-                const tatamiBlock = document.createElement('div');
-                tatamiBlock.className = 'tatami-block';
-
-                // Tatami header
-                const header = document.createElement('div');
-                header.className = 'tatami-header';
-                header.textContent = `Tatami ${tatami.tatami}`;
-                tatamiBlock.appendChild(header);
-
-                // Scrollable wrapper
-                const scrollWrapper = document.createElement('div');
-                scrollWrapper.className = 'scrollable-container';
-
-                // Fights grid container
-                const grid = document.createElement('div');
-                grid.className = 'fights-grid';
-
-                filteredMatches.forEach(match => {
-                    const fightsIn = match.num - 1;
-                    let title;
-                    if (fightsIn === 0) {
-                        title = 'Current Fight';
-                    } else if (fightsIn === 1) {
-                        title = 'Next Fight';
-                    } else {
-                        title = `In ${fightsIn} Fights`;
-                    }
-
-                    // Match card
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'match-card';
-                    if (fightsIn <= 1) wrapper.classList.add('highlight');
-
-                    // Category
-                    const catDiv = document.createElement('div');
-                    catDiv.className = 'match-category';
-                    catDiv.textContent = match.cat;
-
-                    // White side
-                    const whiteDiv = document.createElement('div');
-                    whiteDiv.className = 'match-white';
-                    whiteDiv.innerHTML = `${match.first1} ${match.last1}<br>${match.club1}`;
-
-                    // Blue side
-                    const blueDiv = document.createElement('div');
-                    blueDiv.className = 'match-blue';
-                    blueDiv.innerHTML = `${match.first2} ${match.last2}<br>${match.club2}`;
-
-                    // Title
-                    const titleDiv = document.createElement('div');
-                    titleDiv.className = 'match-title';
-                    titleDiv.textContent = title;
-
-                    wrapper.appendChild(titleDiv);
-                    wrapper.appendChild(catDiv);
-                    wrapper.appendChild(whiteDiv);
-                    wrapper.appendChild(blueDiv);
-
-                    grid.appendChild(wrapper);
-                });
-
-                scrollWrapper.appendChild(grid);
-                tatamiBlock.appendChild(scrollWrapper);
-                outputContainer.appendChild(tatamiBlock);
-            });
-
-            if (outputContainer.innerHTML.trim() === '') {
-                outputContainer.textContent = 'No matching fights found.';
-            }
+            lastFetchedData = data;
+            renderMatches(lastFetchedData);
         })
         .catch(error => {
             document.getElementById('output').textContent = `Error: ${error.message}`;
         });
+}
+
+function createMatchCard(title, match) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'match-card';
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'match-title';
+    titleDiv.textContent = title;
+
+    const catDiv = document.createElement('div');
+    catDiv.className = 'match-category';
+    catDiv.textContent = match.cat;
+
+    const whiteDiv = document.createElement('div');
+    whiteDiv.className = 'match-white';
+    whiteDiv.innerHTML = `${match.first1} ${match.last1}<br>${match.club1}`;
+
+    const blueDiv = document.createElement('div');
+    blueDiv.className = 'match-blue';
+    blueDiv.innerHTML = `${match.first2} ${match.last2}<br>${match.club2}`;
+
+    wrapper.appendChild(titleDiv);
+    wrapper.appendChild(catDiv);
+    wrapper.appendChild(whiteDiv);
+    wrapper.appendChild(blueDiv);
+
+    return wrapper;
 }
 
 function startTracking() {
@@ -1022,5 +960,109 @@ function stopTracking(isClearUi) {
         document.getElementById('trackToggleBtn').textContent = 'Start Tracking';
         document.getElementById('countdown').textContent = '-';
         trackingActive = false;
+    }
+}
+
+function handleSearchTerm(searchTerms, match) {
+    return searchTerms.length === 0 || searchTerms.some(term => [
+        `${match.first1} ${match.last1}`,
+        `${match.last1} ${match.first1}`,
+        `${match.first2 ?? ''} ${match.last2 ?? ''}`,
+        `${match.last2 ?? ''} ${match.first2 ?? ''}`,
+        match.club1,
+        match.club2
+    ].join(' ').toLowerCase().includes(term))
+}
+
+function renderMatches(data) {
+    const viewMode = document.getElementById('viewMode').value;
+    const outputContainer = document.getElementById('output');
+    outputContainer.innerHTML = ''; // Clear old content
+
+    const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+    const searchTerms = searchInput
+        .split(',')
+        .map(term => term.trim().toLowerCase())
+        .filter(term => term.length > 0);
+
+    if (viewMode === 'tatami') {
+        data.forEach(tatami => {
+            const filteredMatches = tatami.matches.filter(match => match.num !== 0 &&
+                (handleSearchTerm(searchTerms, match)));
+
+            if (filteredMatches.length === 0) return;
+
+            // Create tatami block
+            const tatamiBlock = document.createElement('div');
+            tatamiBlock.className = 'tatami-block';
+
+            // Tatami header
+            const header = document.createElement('div');
+            header.className = 'tatami-header';
+            header.textContent = `Tatami ${tatami.tatami}`;
+            tatamiBlock.appendChild(header);
+
+            // Scrollable wrapper
+            const scrollWrapper = document.createElement('div');
+            scrollWrapper.className = 'scrollable-container';
+
+            // Fights grid container
+            const grid = document.createElement('div');
+            grid.className = 'fights-grid';
+
+            filteredMatches.forEach(match => {
+                const fightsIn = match.num - 1;
+                const title = fightsIn === 0 ? 'Current Fight' : fightsIn === 1 ? 'Next Fight' : `In ${fightsIn} Fights`;
+                const card = createMatchCard(title, match);
+                if (fightsIn <= 1) card.classList.add('highlight');
+                grid.appendChild(card);
+            });
+
+            scrollWrapper.appendChild(grid);
+            tatamiBlock.appendChild(scrollWrapper);
+            outputContainer.appendChild(tatamiBlock);
+        });
+    } else {
+        const fightsByOrder = {};
+        data.forEach(t => t.matches.filter(m => m.num !== 0).forEach(match => {
+            if (!fightsByOrder[match.num]) fightsByOrder[match.num] = [];
+            fightsByOrder[match.num].push({ ...match, tatami: t.tatami });
+        }));
+
+        Object.keys(fightsByOrder).sort((a, b) => a - b).forEach(num => {
+            const group = fightsByOrder[num].filter(match => {
+                return handleSearchTerm(searchTerms, match);
+            });
+
+            if (group.length === 0) return;
+
+            const block = document.createElement('div');
+            block.className = 'tatami-block';
+
+            const header = document.createElement('div');
+            header.className = 'tatami-header';
+            header.textContent = num === '1' ? 'Current Fight' : num === '2' ? 'Next Fight' : `In ${num - 1} Fights`;
+            block.appendChild(header);
+
+            const scrollWrapper = document.createElement('div');
+            scrollWrapper.className = 'scrollable-container';
+
+            const grid = document.createElement('div');
+            grid.className = 'fights-grid';
+
+            group.forEach(match => {
+                const card = createMatchCard(`Tatami ${match.tatami}`, match);
+                if (parseInt(num) <= 2) card.classList.add('highlight');
+                grid.appendChild(card);
+            });
+
+            scrollWrapper.appendChild(grid);
+            block.appendChild(scrollWrapper);
+            outputContainer.appendChild(block);
+        });
+    }
+
+    if (outputContainer.innerHTML.trim() === '') {
+        outputContainer.textContent = 'No matching fights found.';
     }
 }

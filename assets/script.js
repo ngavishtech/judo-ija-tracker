@@ -904,60 +904,74 @@ function fetchAndDisplay() {
                             match.club1,
                             match.club2
                         ].join(' ').toLowerCase();
-
                         return fields.includes(searchValue);
                     });
 
+                if (filteredMatches.length === 0) return;
+
+                // Create tatami block
+                const tatamiBlock = document.createElement('div');
+                tatamiBlock.className = 'tatami-block';
+
+                // Tatami header
+                const header = document.createElement('div');
+                header.className = 'tatami-header';
+                header.textContent = `Tatami ${tatami.tatami}`;
+                tatamiBlock.appendChild(header);
+
+                // Fights grid container
+                const grid = document.createElement('div');
+                grid.className = 'fights-grid';
+
                 filteredMatches.forEach(match => {
                     const fightsIn = match.num - 1;
-                    let title = `Tatami ${tatami.tatami} - `;
+                    let title = '';
                     if (fightsIn === 0) {
-                        title += 'Current Fight';
+                        title = 'Current Fight';
                     } else if (fightsIn === 1) {
-                        title += 'Next Fight';
+                        title = 'Next Fight';
                     } else {
-                        title += `In ${fightsIn} Fights`;
+                        title = `In ${fightsIn} Fights`;
                     }
 
-                    // const block = document.createElement('pre');
-                    // block.innerHTML = `<strong>${title}</strong>\n` + JSON.stringify(match, null, 2);
-                    // block.style.padding = '10px';
-                    // block.style.margin = '10px 0';
-                    // block.style.border = '1px solid #ccc';
-                    // block.style.borderRadius = '8px';
-                    // block.style.backgroundColor = '#fff59d'; // Highlight
-                    // outputContainer.appendChild(block);
-
+                    // Match card
                     const wrapper = document.createElement('div');
                     wrapper.className = 'match-card';
                     if (fightsIn <= 1) wrapper.classList.add('highlight');
 
-                    const titleDiv = document.createElement('div');
-                    titleDiv.className = 'match-title';
-                    titleDiv.textContent = title;
-
+                    // Category
                     const catDiv = document.createElement('div');
                     catDiv.className = 'match-category';
-                    catDiv.textContent = `Category: ${match.cat}`;
+                    catDiv.textContent = match.cat;
 
+                    // White side
                     const whiteDiv = document.createElement('div');
                     whiteDiv.className = 'match-white';
                     whiteDiv.innerHTML = `${match.first1} ${match.last1}<br>${match.club1}`;
 
+                    // Blue side
                     const blueDiv = document.createElement('div');
                     blueDiv.className = 'match-blue';
                     blueDiv.innerHTML = `${match.first2} ${match.last2}<br>${match.club2}`;
+
+                    // Title
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'match-title';
+                    titleDiv.textContent = title;
 
                     wrapper.appendChild(titleDiv);
                     wrapper.appendChild(catDiv);
                     wrapper.appendChild(whiteDiv);
                     wrapper.appendChild(blueDiv);
 
-                    outputContainer.appendChild(wrapper);
+                    grid.appendChild(wrapper);
                 });
+
+                tatamiBlock.appendChild(grid);
+                outputContainer.appendChild(tatamiBlock);
             });
 
-            if (outputContainer.innerHTML === '') {
+            if (outputContainer.innerHTML.trim() === '') {
                 outputContainer.textContent = 'No matching fights found.';
             }
         })

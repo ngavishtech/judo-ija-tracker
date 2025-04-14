@@ -1,3 +1,4 @@
+/* General page styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f9f9f9;
@@ -8,12 +9,12 @@ body {
 .container {
     max-width: 100%;
     width: 95%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
     background: #ffffff;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -22,6 +23,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Inputs and buttons */
 input {
     width: 100%;
     padding: 12px;
@@ -60,6 +62,7 @@ button {
     background-color: #3498db;
     color: white;
     transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 button:hover {
@@ -80,22 +83,13 @@ button:hover {
 }
 
 #refreshBtn:hover {
-    background-color: #e07b62; /* slightly darker on hover */
+    background-color: #e07b62;
 }
 
 .countdown-text {
     margin: 0;
     font-size: 14px;
     color: #555;
-}
-
-pre {
-    background: #f0f0f0;
-    padding: 16px;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    border-radius: 8px;
-    border: 1px solid #ddd;
 }
 
 #searchInput {
@@ -105,36 +99,68 @@ pre {
     margin-bottom: 20px;
 }
 
+/* Tatami and match layout */
+.tatami-block {
+    margin-bottom: 30px;
+}
+
+.tatami-header {
+    font-size: 22px;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #ecf0f1;
+    border: 2px solid #bdc3c7;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Grid for fights - 5 cards per row */
+.fights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+}
+
+/* Match card */
 .match-card {
     border: 1px solid #ccc;
     border-radius: 8px;
-    margin: 15px 0;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    font-weight: normal;
+    text-align: center;
 }
 
-.highlight {
+/* Highlight for current/next fights */
+.match-card.highlight {
     border: 2px solid #f7d600;
     background-color: #fff59d;
 }
 
+/* Category styling */
+.match-category {
+    font-weight: bold;
+    text-align: center;
+    background-color: #ddd;
+    padding: 6px;
+    font-size: 14px;
+}
+
+/* Title styling */
 .match-title {
-    background-color: #f0f0f0;
-    padding: 10px;
     font-weight: bold;
 }
 
-.match-category {
-    background-color: #eee;
-    padding: 10px;
-    font-style: italic;
-}
-
+/* White and blue sections */
 .match-white,
 .match-blue {
-    padding: 10px;
-    font-size: 15px;
-    line-height: 1.5;
+    padding: 6px 8px;
+    line-height: 1.4;
+    font-size: 16px;
 }
 
 .match-white {
@@ -143,4 +169,11 @@ pre {
 
 .match-blue {
     background-color: #d0e6ff;
+}
+
+/* Responsive fallback */
+@media (max-width: 600px) {
+    .fights-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
 }

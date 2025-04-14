@@ -888,9 +888,14 @@ function fetchAndDisplay() {
                     ]
                 }
             ];
-            const searchValue = document.getElementById('searchInput').value.trim().toLowerCase();
             const outputContainer = document.getElementById('output');
             outputContainer.innerHTML = ''; // Clear old content
+
+            const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+            const searchTerms = searchInput
+                .split(',')
+                .map(term => term.trim().toLowerCase())
+                .filter(term => term.length > 0);
 
             data.forEach(tatami => {
                 const filteredMatches = tatami.matches
@@ -904,7 +909,7 @@ function fetchAndDisplay() {
                             match.club1,
                             match.club2
                         ].join(' ').toLowerCase();
-                        return fields.includes(searchValue);
+                        return searchTerms.length === 0 || searchTerms.some(term => fields.includes(term));
                     });
 
                 if (filteredMatches.length === 0) return;

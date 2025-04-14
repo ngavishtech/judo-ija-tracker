@@ -925,7 +925,7 @@ function fetchAndDisplay() {
 
                 filteredMatches.forEach(match => {
                     const fightsIn = match.num - 1;
-                    let title = '';
+                    let title;
                     if (fightsIn === 0) {
                         title = 'Current Fight';
                     } else if (fightsIn === 1) {

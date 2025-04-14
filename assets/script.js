@@ -82,6 +82,7 @@ function fetchAndDisplay() {
         })
         .then(data => {
             //MOCK Data for debugging
+
             // data = [
             //     {
             //         "tatami": 1,

@@ -924,6 +924,10 @@ function fetchAndDisplay() {
                 header.textContent = `Tatami ${tatami.tatami}`;
                 tatamiBlock.appendChild(header);
 
+                // Scrollable wrapper
+                const scrollWrapper = document.createElement('div');
+                scrollWrapper.className = 'scrollable-container';
+
                 // Fights grid container
                 const grid = document.createElement('div');
                 grid.className = 'fights-grid';
@@ -972,7 +976,8 @@ function fetchAndDisplay() {
                     grid.appendChild(wrapper);
                 });
 
-                tatamiBlock.appendChild(grid);
+                scrollWrapper.appendChild(grid);
+                tatamiBlock.appendChild(scrollWrapper);
                 outputContainer.appendChild(tatamiBlock);
             });
 

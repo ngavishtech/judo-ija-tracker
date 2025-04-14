@@ -170,9 +170,14 @@ button:hover {
     background-color: #d0e6ff;
 }
 
-/* Responsive fallback */
-@media (max-width: 600px) {
-    .fights-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-    }
+.scrollable-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
+
+/* Responsive fallback */
+/*@media (max-width: 600px) {*/
+/*    .fights-grid {*/
+/*        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));*/
+/*    }*/
+/*}*/
